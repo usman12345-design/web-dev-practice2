@@ -9,10 +9,11 @@ class Config
     {
         $this->config = [
             'db' => [
-                'host' => $_ENV['DB_HOST'],
                 'dbname' => $_ENV['DB_DATABASE'],
                 'user' => $_ENV['DB_USER'],
-                'pass' => $_ENV['DB_PASS']
+                'password' => $_ENV['DB_PASS'],
+                'host' => $_ENV['DB_HOST'],
+                'driver' => $_ENV['DB_DRIVER']
             ],
             'Mailer' => [
                 'dsn' => $_ENV['MAILER_DSN'] ?? []
