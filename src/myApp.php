@@ -1,33 +1,30 @@
 <?php
 namespace App;
 use App\database;
+use App\CustomMailer;
+use Symfony\Component\Mailer\MailerInterface;
+use App\Service\PaymentGatewayServiceInterface;
+use App\Service\PaymentGatewayService;
+use Dotenv\Dotenv;
 class myApp
 {
     private static database $db;
-    // public static Container $Container;
-    public function __construct(protected Container $container, protected router $Routers, protected array $method, protected Config $config)
+    private Config $config;
+    public function __construct(
+        protected Container $container,
+        protected ?router $Routers = null,
+        protected array $method = []
+    ) {
+    }
+    public function boot(): static
     {
-        static::$db = new database($config->db);
-        $this->container->set(
-            Service\PaymentGatewayServiceInterface::class,
-            Service\PaymentGatewayService::class
-            //fn(Container $c) => $c->get(Service\PaymentGatewayService::class)
-        );
-
-
-        /*  static::$Container = new Container;
-          static::$Container->set(Service\InvoiceService::class, function (Container $c) {
-              return new Service\InvoiceService(
-                  $c->get(Service\SalesTaxService::class),
-                  $c->get(Service\PaymentGatewayService::class),
-                  $c->get(Service\EmailService::class)
-              );
-          });
-
-          static::$Container->set(Service\SalesTaxService::class, fn() => new Service\SalesTaxService());
-          static::$Container->set(Service\PaymentGatewayService::class, fn() => new Service\PaymentGatewayService());
-          static::$Container->set(Service\EmailService::class, fn() => new Service\EmailService());*/
-
+        $dotenv = Dotenv::createImmutable(dirname(__DIR__));
+        $dotenv->load();
+        $this->config = new Config($_ENV);
+        static::$db = new database($this->config->db);
+        $this->container->set(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
+        $this->container->set(MailerInterface::class, fn() => new CustomMailer($this->config->Mailer['dsn']));
+        return $this;
     }
 
     public static function DB()

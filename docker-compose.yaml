@@ -47,6 +47,30 @@ services:
     networks:
       - new-wb-network
 
+  mailhog:
+    container_name: new-wb-mailhog
+    image: mailhog/mailhog
+    restart: always
+    logging:
+      driver: "none"
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - new-wb-network
+
+    # Background Cron Task Scheduler Engine
+  cron:
+      container_name: new-wb-cron
+      build: ./cron
+      init: true
+      volumes:
+        - .:/var/www
+        - vendor_data:/var/www/vendor
+      networks:
+        - new-wb-network
+
+
 # Networks
 networks:
   new-wb-network:

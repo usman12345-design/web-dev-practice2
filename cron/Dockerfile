@@ -14,4 +14,4 @@ WORKDIR /var/www
 RUN echo "*/2 * * * * php /var/www/scripts/email.php > /proc/1/fd/1 2>&1" > /etc/crontabs/root
 
 # 4. Run the cron daemon in the foreground (-f) so the Docker container stays active
-ENTRYPOINT ["crond", "-f", "-l", "2"]
+ENTRYPOINT ["crond", "-f", "ps-l", "2"]
