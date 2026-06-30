@@ -27,29 +27,28 @@ $config = ORMSetup::createAttributeMetadataConfiguration(
 $connection = DriverManager::getConnection($Params, $config);
 $entityManager = new EntityManager($connection, $config);
 
-//items = [['item4', 4, 15],['item5', 5, 7.5],['item6', 6, 75]];
-//invoice = (new invoices())
-//           ->setAmount(42)
-//           ->setInvoiceNumber('2')
-//           ->setStatus(InvoiceStatus::PENDING)
-//           ->setCreatedAt(new \DateTime());
-//
-//foreach ($items as [$description, $quantity, $unitPrice]) {
-//   $item = (new invoiceItems())
-//           ->setDescription($description)
-//           ->setQuantity($quantity)
-//           ->setUnitPrice($unitPrice);
-//   $invoice->addItems($item);
-//}
-$invoice = $entityManager->find(invoices::class, 3);
-if ($invoice === null) {
+$items = [['item7', 7, 15],['item8', 8, 7.5],['item9', 9, 75]];
+$invoice = (new invoices())
+           ->setAmount(50)
+           ->setInvoiceNumber('4')
+           ->setStatus(InvoiceStatus::PENDING);
 
-    die("Error: Invoice with ID 3 was not found in the database!\n");
+foreach ($items as [$description, $quantity, $unitPrice]) {
+   $item = (new invoiceItems())
+           ->setDescription($description)
+           ->setQuantity($quantity)
+           ->setUnitPrice($unitPrice);
+   $invoice->addItems($item);
 }
-$invoice->getItems()->get(0)->setDescription('foo bar');
+//$invoice = $entityManager->find(invoices::class, 3);
+//if ($invoice === null) {
+//
+//    die("Error: Invoice with ID 3 was not found in the database!\n");
+//}
+//$invoice->getItems()->get(0)->setDescription('foo bar');
 
  //$invoice->setStatus(InvoiceStatus::PAID);
-//$entityManager->persist($invoice);
+$entityManager->persist($invoice);
 $entityManager->flush();
 
 

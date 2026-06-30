@@ -7,9 +7,11 @@ use App\Enums\InvoiceStatus;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Event\PrePersistEventArgs;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'invoices')]
+#[ORM\HasLifecycleCallbacks]
 class invoices
 {
     #[ORM\Id]
@@ -37,6 +39,11 @@ class invoices
     {
         $this->items = new ArrayCollection();
     }
+    #[ORM\PrePersist]
+    public function anPrePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): int
     {
@@ -46,12 +53,6 @@ class invoices
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTime $createdAt): invoices
-    {
-        $this->createdAt = $createdAt;
-        return $this;
     }
 
     public function getAmount(): float
