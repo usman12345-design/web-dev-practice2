@@ -1,5 +1,5 @@
 <?php
-namespace App;
+/* this database class for dbl connecton
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Schema\Column;
@@ -18,4 +18,4 @@ class database
         return call_user_func_array([$this->connection, $method], $args);
 
     }
-}
+}*/

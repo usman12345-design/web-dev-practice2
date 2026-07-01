@@ -1,4 +1,5 @@
 <?php
+/* this is  wrapper class for database class for pdo mysql/dblconnection
 namespace App;
 
 abstract class Modal
@@ -11,3 +12,4 @@ abstract class Modal
     }
 
 }
+*/

@@ -40,7 +40,7 @@ class UserController
         <br />
         Thank you for signing up!
         HtmlBody;
-
+//change
         (new \App\Modals\Email())->queue(
             new Address($email),
             new Address('support@example.com', 'Support'),

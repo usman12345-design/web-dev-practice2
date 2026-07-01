@@ -7,7 +7,7 @@ use ReflectionClass;
 class router
 {
     private array $routes = [];
-    public function __construct(protected Container $container)
+    public function __construct(protected \Illuminate\Container\Container $container)
     {
     }
 

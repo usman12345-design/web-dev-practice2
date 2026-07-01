@@ -7,6 +7,7 @@ use App\Enums\EmailStatus;
 
 class EmailService
 {
+    //change
   public function __construct(protected \App\Modals\Email $emailModel, protected MailerInterface $mailer)
   {
 
@@ -15,9 +16,10 @@ class EmailService
   public function SendQueuedEmails()
   {
     $emails = $this->emailModel->getEmailByStatus(EmailStatus::Queue);
-
     foreach ($emails as $email) {
-      $meta = json_decode($email->meta, true);
+      //$meta = json_decode($email->meta, true);
+        // 💡 FIX: No need to json_decode! Eloquent already made $email->meta a native PHP array.
+        $meta = $email->meta;
       $emailMessage = (new SymfonyEmail())
         ->from($meta['from'])
         ->to($meta['to'])

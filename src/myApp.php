@@ -6,12 +6,14 @@ use Symfony\Component\Mailer\MailerInterface;
 use App\Service\PaymentGatewayServiceInterface;
 use App\Service\PaymentGatewayService;
 use Dotenv\Dotenv;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
 class myApp
 {
-    private static database $db;
+   // private static database $db;
     private Config $config;
     public function __construct(
-        protected Container $container,
+        protected \Illuminate\Container\Container $container,
         protected ?router $Routers = null,
         protected array $method = []
     ) {
@@ -21,15 +23,22 @@ class myApp
         $dotenv = Dotenv::createImmutable(dirname(__DIR__));
         $dotenv->load();
         $this->config = new Config($_ENV);
-        static::$db = new database($this->config->db);
-        $this->container->set(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
-        $this->container->set(MailerInterface::class, fn() => new CustomMailer($this->config->Mailer['dsn']));
+        //static::$db = new database($this->config->db); in eloquent use next one
+        $this->intDb($this->config->db);
+        //for laravel container change from set to bind
+        $this->container->bind(PaymentGatewayServiceInterface::class, PaymentGatewayService::class);
+        $this->container->bind(MailerInterface::class, fn() => new CustomMailer($this->config->Mailer['dsn']));
         return $this;
     }
 
-    public static function DB()
+    private function intDb(array $config)
     {
-        return self::$db;
+        $capsule = new Capsule;
+
+        $capsule->addConnection($config );
+        $capsule->setEventDispatcher(new Dispatcher($this->container));
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
 
     }
 
@@ -49,4 +58,11 @@ class myApp
         }
 
     }
+
+    /*
+    public static function DB()
+    {
+        return self::$db;
+
+    }*/
 }

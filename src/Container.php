@@ -1,4 +1,5 @@
 <?php
+/*now using laraval container
 namespace App;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -62,8 +63,8 @@ class Container implements ContainerInterface
             if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
                 return $this->get($type->getName());
             }
-            throw new ContainerException('class"' . $id . '" has invalid params');
+            throw new ContainerException('class' . $id . ' has invalid params');
         }, $parameters);
         return $reflectionClass->newInstanceArgs($dependencies); //which is equivalent to:new invoiceService(new emailService());
     }
-}
+}*/
